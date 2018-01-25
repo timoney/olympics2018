@@ -42,6 +42,7 @@ export class UserService {
     let params = new URLSearchParams();
     params.append('frstNm', user.frstNm);
     params.append('lstNm', user.lstNm);
+    params.append('group', user.group)
     params.append('emlTx', user.emlTx);
     params.append('password', user.password);
     return this.http.post(this.api_proxy + 'register', params)

@@ -1,3 +1,53 @@
-<p>
-  register works!
-</p>
+<br>
+<div class="container col-md-4 col-md-offset-4">
+    <h1>Sign Up</h1>
+    <form #registerForm="ngForm" (ngSubmit)="register()">
+      <div class="form-group">
+        <label for="frstNm">First Name</label>
+        <input type="text" class="form-control" id="frstNm" name="frstNm" #frstNm="ngModel" required [(ngModel)]="model.frstNm">
+        <div [hidden]="frstNm.valid || frstNm.untouched" class="alert alert-danger">
+            First Name is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lstNm">Last Name</label>
+        <input type="text" class="form-control" id="lstNm" name="lstNm" #lstNm="ngModel" required [(ngModel)]="model.lstNm">
+        <div [hidden]="lstNm.valid || lstNm.untouched" class="alert alert-danger">
+            Last Name is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="group">Group</label>
+        <select class="form-control" id="group" name="group" #group="ngModel" required [(ngModel)]="model.group">
+          <option>Timoney Family</option>
+          <option>Bank of America</option>
+          <option>Friends</option>
+        </select>
+        <div [hidden]="group.valid || group.untouched" class="alert alert-danger">
+            Group is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="emlTx">Email</label>
+        <input type="text" class="form-control" id="emlTx" name="emlTx" #emlTx="ngModel" required [(ngModel)]="model.emlTx">
+        <div [hidden]="emlTx.valid || emlTx.untouched" class="alert alert-danger">
+            Email is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" #password="ngModel" required [(ngModel)]="model.password">
+        <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
+            Password is required
+        </div>
+      </div>
+      <div *ngIf="errorMsg" class="alert alert-danger">
+          {{errorMsg}}
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.form.valid">Sign Up</button>
+        <a [routerLink]="['/']" class="btn btn-link">Cancel</a>
+      </div>
+    </form>
+</div>

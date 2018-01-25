@@ -1,5 +1,4 @@
-LOgin
-<!--<div class="container col-md-4">
+<div class="container col-md-4 col-md-offset-4">
     <h2>Login</h2>
     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -17,7 +16,7 @@ LOgin
         </div>
         <div class="form-group">
             <button [disabled]="loading" class="btn btn-primary">Login</button>
-            <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+            <a [routerLink]="['/register']" class="btn btn-link">Sign Up</a>
         </div>
     </form>
-</div>-->
+</div>
