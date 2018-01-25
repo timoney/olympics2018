@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { EVENT_PARTICIPANTS } from '../mock-event-participants';
 
 @Component({
