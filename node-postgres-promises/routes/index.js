@@ -2,13 +2,13 @@ var express = require('express');
 var router = express.Router();
 var db = require('../sql/queries');
 
+router.post('/login', db.loginUser);
+router.post('/register', db.createUser);
+
 router.get('/olympics18/users', db.getAllUsers);
 router.get('/olympics18/users/:id', db.getSingleUser);
-router.post('/olympics18/users', db.createUser);
 router.put('/olympics18/users/:id', db.updateUser);
 router.delete('/olympics18/users/:id', db.removeUser);
-
-router.post('/olympics18/users/login', db.loginUser);
 
 router.get('/olympics18/events', db.getAllEvents);
 router.get('/olympics18/events/:id', db.getSingleEvent);

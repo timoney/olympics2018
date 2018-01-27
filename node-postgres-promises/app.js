@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var pug = require('pug');
 var routes = require('./routes/index');
 var cors = require('cors');
+var jwt = require('jsonwebtoken');
 
 var app = express();
 
@@ -14,8 +15,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'public/views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,6 +26,20 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
+});
+
+// ensure api request has token for routes that start with /olympics18/
+app.all('/olympics18/*', function(req, res, next) {
+  try {
+     console.log(req.get('Authorization'));
+     jwt.verify(req.get('Authorization'), 'secret');
+     next();
+  } catch(err) {
+    return res.json({
+      success: false,
+      error: "Please supply a token"
+    });
+  }
 });
 
 app.use('/', routes);
