@@ -1,4 +1,6 @@
 var promise = require('bluebird');
+var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 var options = {
   // Initialization Options
@@ -9,6 +11,7 @@ var options = {
 var pgp = require('pg-promise')(options);
 var connectionString = '';
 var config = {
+
 };
 var db = pgp(config);
 
@@ -45,22 +48,52 @@ function getSingleUser(req, res, next) {
 }
 
 function createUser(req, res, next) {
-  console.log('data' + "frst_nm: " + req.body.frst_nm + "lst_nm: " + req.body.lst_nm + "email: " + req.body.eml_tx);
-  db.none('insert into user_profile ' + 
+  var hash = bcrypt.hashSync(req.body.password, 10);
+  req.body.password = hash;
+  db.one('insert into user_profile ' + 
       '(FRST_NM, LST_NM, EML_TX, GROUP_NM, PASSWORD) ' +
-      'values($1, $2, $3, $4, $5)',
+      'values($1, $2, $3, $4, $5) RETURNING USER_ID',
     [req.body.frst_nm, req.body.lst_nm, req.body.eml_tx, req.body.group_nm, req.body.password])
-    .then(function () {
-      res.status(200)
-        .json({
-          status: 'success',
-          message: 'Inserted one user'
-        });
+    .then(function(data){
+      var user = { user_id: data.user_id };
+      var token = jwt.sign(user, 'secret', {
+          expiresIn : 60*60*24 // expires in 24 hours
+      });
+      res.json({ success: true, message: 'Enjoy your token!', user_id: data.user_id, token: token });
     })
     .catch(function (err) {
       return next(err);
     });
 }
+
+function loginUser(req, res, next) {
+  console.log('here0');
+  // find the user
+  db.one('select user_id, password from user_profile where eml_tx=$1', [req.body.eml_tx])
+    .then(data => {
+      console.log('here1');
+      if (!data) {
+          console.log('here2');
+          res.json({ success: false, error: 'Authentication failed. User not found.' });
+      } else if (!bcrypt.compareSync(req.body.password, data.password)) {
+          console.log('here3 ');
+          res.json({ success: false, error: 'Authentication failed. Wrong password.' });
+      } else {
+          console.log('here4');
+          var user = { user_id: data.user_id };
+          var token = jwt.sign(user, 'secret', {
+              expiresIn : 60*60*24 // expires in 24 hours
+          });
+          res.json({ success: true, message: 'Enjoy your token!', user_id: data.user_id, token: token });
+      }
+    })
+    .catch(error => {
+      res.json({
+        success: false,
+        error: error.message || error
+      });
+    });
+};
 
 function updateUser(req, res, next) {
   var userId = parseInt(req.params.id);
@@ -346,6 +379,7 @@ module.exports = {
   createUser: createUser,
   updateUser: updateUser,
   removeUser: removeUser,
+  loginUser: loginUser,
   getAllEvents: getAllEvents,
   getSingleEvent: getSingleEvent,
   createEvent: createEvent,

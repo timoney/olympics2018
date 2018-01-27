@@ -8,7 +8,6 @@ var pug = require('pug');
 var routes = require('./routes/index');
 var cors = require('cors');
 
-
 var app = express();
 
 // view engine setup

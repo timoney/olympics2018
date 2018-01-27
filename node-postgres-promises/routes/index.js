@@ -8,6 +8,8 @@ router.post('/olympics18/users', db.createUser);
 router.put('/olympics18/users/:id', db.updateUser);
 router.delete('/olympics18/users/:id', db.removeUser);
 
+router.post('/olympics18/users/login', db.loginUser);
+
 router.get('/olympics18/events', db.getAllEvents);
 router.get('/olympics18/events/:id', db.getSingleEvent);
 router.post('/olympics18/events', db.createEvent);
