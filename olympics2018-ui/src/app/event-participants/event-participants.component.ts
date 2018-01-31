@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { EVENT_PARTICIPANTS } from '../mock-event-participants';
+import { EventService } from '../services/event.service';
+import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
+//import { Event, EventParticipant, mock-events} from '../data-model';
 
 @Component({
   selector: 'app-event-participants',
@@ -9,25 +11,32 @@ import { EVENT_PARTICIPANTS } from '../mock-event-participants';
 })
 export class EventParticipantsComponent implements OnInit {
   private _event_id = 0;
-  private event_participants = [];
-  user_selection : number;
+  participants : any;
+  errorMessage: any;
+  user_selection: any;
+  
+  eventForm = new FormGroup({
+    winner: new FormControl()
+  });
 
-  @Input() 
+  @Input()
   set event_id(event_id: number) {
     this._event_id = event_id;
-    console.log(this.event_id);
-    console.log(EVENT_PARTICIPANTS);
-    this.event_participants = EVENT_PARTICIPANTS.filter(function (el) {
-      console.log(el.event_id);
-      console.log(event_id);
-      return el.event_id== event_id;
-    });
+    this.participants = this.getEventParticipants();
+    console.log(this.participants);
+  }
 
+  getEventParticipants() {
+    this.eventService.getEventParticipants(this._event_id)
+      .subscribe(
+        participants => this.participants = participants,
+        error => this.errorMessage = <any>error
+      );
   }
 
   get event_id(): number { return this._event_id; }
 
-  constructor() { }
+  constructor(public eventService: EventService) { }
 
   ngOnInit() {
   }

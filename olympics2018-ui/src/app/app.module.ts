@@ -8,18 +8,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { EventsModule } from './events/events.module';
-//import { EventParticipantsModule } from './event-participants/event-participants.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { PageNotFoundModule} from './page-not-found/page-not-found.module';
 import { RegisterModule } from './register/register.module';
 
-import { UserService } from './user.service';
+import { EventService } from './services/event.service'
+import { UserService } from './services/user.service';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AlertModule.forRoot(),
@@ -33,7 +33,7 @@ import { UserService } from './user.service';
     RegisterModule,
     AppRoutingModule
   ],
-  providers: [UserService],
+  providers: [EventService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

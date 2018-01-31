@@ -10,18 +10,13 @@ export class UserService {
 
   public token: string;
 
-  public api_proxy: string = 'https://vbwp8o6p1i.execute-api.us-east-2.amazonaws.com/milb_api_proxy/';
-  /**
-   * Creates a new NameListService with the injected Http.
-   * @param {Http} http - The injected Http.
-   * @constructor
-   */
+  public api_proxy: string = 'http://localhost:3000/';
+
   constructor(private http: Http) {}
 
   getTokenHeader(): Headers {
     let token = null;
     let user = localStorage.getItem('currentUser');
-    console.log(user);
     if (user) {
       token = JSON.parse(user).token;
     }
@@ -31,22 +26,30 @@ export class UserService {
 
   login(email: string, password: string): Observable<any> {
       let params = new URLSearchParams();
-      params.append('email', email);
+      params.append('eml_tx', email);
       params.append('password', password);
-      return this.http.post(this.api_proxy + 'authenticate', params)
+      return this.http.post(this.api_proxy + 'login', params)
           //.do(data => console.log('server data:', data))  // debug
           .map(this.handleTokenResponse);
   }
 
   register(user: any): Observable<any> {
     let params = new URLSearchParams();
-    params.append('frstNm', user.frstNm);
-    params.append('lstNm', user.lstNm);
-    params.append('group', user.group)
-    params.append('emlTx', user.emlTx);
+    params.append('frst_nm', user.frstNm);
+    params.append('lst_nm', user.lstNm);
+    params.append('group_nm', user.group)
+    params.append('eml_tx', user.emlTx);
     params.append('password', user.password);
     return this.http.post(this.api_proxy + 'register', params)
         .map(this.handleTokenResponse);
+  }
+
+  getUserEventSelections(event_id: number ): Observable<any> {
+    let options = new RequestOptions({ headers: this.getTokenHeader()});
+    return this.http.get(this.api_proxy + 'olympics18/users/' + event_id + '/eventSelections', options)
+      .map(this.extractData)
+      .do(data => console.log('server data:', data))  // debug
+      .catch(this.handleError);
   }
 
   logout(): void {
@@ -67,7 +70,6 @@ export class UserService {
         // return true to indicate successful login
         return {success: true};
     } else {
-
         // return false to indicate failed login
         return res.json();
     }
@@ -75,13 +77,9 @@ export class UserService {
 
   private extractData(res: Response) {
     let body = res.json();
-    console.log(body);
     return body.data || body || { };
   }
 
-  /**
-    * Handle HTTP error
-    */
   private handleError (error: any) {
     console.log(error);
     let errMsg = (error.message) ? error.message :

@@ -15,6 +15,8 @@ var config = {
 };
 var db = pgp(config);
 
+var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=11) e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc';
+
 function getAllUsers(req, res, next) {
   console.log("get all user info");
   db.any('select * from user_profile')
@@ -40,6 +42,76 @@ function getSingleUser(req, res, next) {
           status: 'success',
           data: data,
           message: 'Retrieved ONE user'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
+function getUserSelections(req, res, next) {
+  console.log("get selections for user" + req.params.id);
+  db.any(eventsQuery, req.params.id)
+    .then(function (data) {
+      // build event object from result
+      var eventObjs = [];
+      var event_ids = [];
+
+      // loop through all events/participants that are returned
+      for (var i = 0, len = data.length; i < len; i++) {
+        var curr_event_id = data[i].event_id;
+
+        console.log(data[i]);
+        
+        // check if we have already created an event object, base on event_id
+        var eventObjExists = false;
+        var eventObjIndex = 0;
+        for (var j = 0, len2 = eventObjs.length; j < len2; j++ ) {
+          if (eventObjs[j].event_id == curr_event_id) {
+            eventObjExists = true;
+            eventObjIndex = j;
+            break;
+          }
+        }
+        
+        // if event object already exists, just add the participant to the array
+        // else create a new event obj
+        if (eventObjExists) {
+          eventObjs[j].participants.push({
+            'event_participant_id': data[i].event_participant_id,
+            'participant_nm': data[i].participant_nm,
+            'country': data[i].country,
+            'points': data[i].points,
+            'odds': data[i].odds,
+            'finish': data[i].finish
+          });
+          if (data[i].user_selection) {
+            eventObjs[j].user_selection = data[i].user_selection;
+          } 
+        } else {
+          event_ids.push(curr_event_id);
+          eventObjs.push({
+            'event_id': data[i].event_id,
+            'event_nm': data[i].event_nm,
+            'event_dt': data[i].event_dt,
+            'stat_cd': data[i].stat_cd,
+            'user_selection': data[i].user_selection,
+            'participants': [{
+              'event_participant_id': data[i].event_participant_id,
+              'participant_nm': data[i].participant_nm,
+              'country': data[i].country,
+              'points': data[i].points,
+              'odds': data[i].odds,
+              'finish': data[i].finish
+            }]
+          });
+        }
+      }
+      res.status(200)
+        .json({
+          status: 'success',
+          data: eventObjs,
+          message: 'Retrieved User Selections'
         });
     })
     .catch(function (err) {
@@ -129,6 +201,7 @@ function removeUser(req, res, next) {
 }
 
 function getAllEvents(req, res, next) {
+  console.log("here");
   db.any('select * from event')
     .then(function (data) {
       res.status(200)
@@ -223,15 +296,15 @@ function getAllEventParticipants(req, res, next) {
     });
 }
 
-function getSingleEventParticipant(req, res, next) {
-  console.log("get event info for event_particant_id: " + req.params.id);
-  db.one('select * from event_participant where event_participant_id = $1', req.params.id)
+function getEventParticipants(req, res, next) {
+  console.log("get event info for event_id: " + req.params.id);
+  db.any('select * from event_participant where event_id = $1', req.params.id)
     .then(function (data) {
       res.status(200)
         .json({
           status: 'success',
           data: data,
-          message: 'Retrieved ONE event participant'
+          message: 'Retrieved event participants'
         });
     })
     .catch(function (err) {
@@ -376,6 +449,7 @@ function removeUserSelection(req, res, next) {
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
+  getUserSelections: getUserSelections,
   createUser: createUser,
   updateUser: updateUser,
   removeUser: removeUser,
@@ -386,7 +460,7 @@ module.exports = {
   updateEvent: updateEvent,
   removeEvent: removeEvent,
   getAllEventParticipants: getAllEventParticipants,
-  getSingleEventParticipant: getSingleEventParticipant,
+  getEventParticipants: getEventParticipants,
   createEventParticipant: createEventParticipant,
   updateEventParticipant: updateEventParticipant,
   removeEventParticipant: removeEventParticipant,

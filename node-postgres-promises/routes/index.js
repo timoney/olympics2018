@@ -7,6 +7,7 @@ router.post('/register', db.createUser);
 
 router.get('/olympics18/users', db.getAllUsers);
 router.get('/olympics18/users/:id', db.getSingleUser);
+router.get('/olympics18/users/:id/eventSelections', db.getUserSelections);
 router.put('/olympics18/users/:id', db.updateUser);
 router.delete('/olympics18/users/:id', db.removeUser);
 
@@ -17,7 +18,7 @@ router.put('/olympics18/events/:id', db.updateEvent);
 router.delete('/olympics18/events/:id', db.removeEvent);
 
 router.get('/olympics18/eventParticipants', db.getAllEventParticipants);
-router.get('/olympics18/eventParticipants/:id', db.getSingleEventParticipant);
+router.get('/olympics18/eventParticipants/:id', db.getEventParticipants);
 router.post('/olympics18/eventParticipants', db.createEventParticipant);
 router.put('/olympics18/eventParticipants/:id', db.updateEventParticipant);
 router.delete('/olympics18/eventParticipants/:id', db.removeEventParticipant);
