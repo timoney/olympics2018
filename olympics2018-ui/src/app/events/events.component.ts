@@ -9,7 +9,7 @@ import { FormGroup, FormControl, FormArray} from '@angular/forms';
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent implements OnInit {
-  events: any;
+  event_information: any;
   errorMessage: any;
   user: any;
   eventsForm: FormGroup;
@@ -32,7 +32,7 @@ export class EventsComponent implements OnInit {
     this.userService.getUserEventSelections(this.user.user_id)
       .subscribe(
         events => {
-          this.events = events; 
+          this.event_information = events; 
           this.addEventsToForm();
         },
         error => this.errorMessage = <any>error
@@ -40,13 +40,12 @@ export class EventsComponent implements OnInit {
   }
 
   addEventsToForm() {
-    for (var i = 0, len = this.events.length; i < len; i++) {
-      console.log(this.events[i]);
+    for (var i = 0, len = this.event_information.length; i < len; i++) {
       const group = new FormGroup({
-        'event_id': this.events[i].event_id,
-        'event_dt': this.events[i].event_dt,
-        'event_nm': this.events[i].event_nm,
-        'user_selection': this.events[i].user_selection,
+        'event_id': new FormControl(this.event_information[i].event_id),
+        'event_dt': new FormControl(this.event_information[i].event_dt),
+        'event_nm': new FormControl(this.event_information[i].event_nm),
+        'user_selection': new FormControl(this.event_information[i].user_selection)
       });
       (<FormArray>this.eventsForm.get('events')).push(group);
     }

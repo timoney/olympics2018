@@ -15,22 +15,19 @@
 <h3>Form Info:</h3>
 <div>{{eventsForm.value | json}}</div>
 
-<h3>Group info:</h3>
-<div> {{ eventsForm.get('events') }} </div>
-
 <div [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
   <div formArrayName="events">
     <h4>Events</h4>
     <div 
       class="form-group" 
-      *ngFor="let event of events.controls; let i = index;" [formGroupName]="i" >
-      {{ event.value['event_nm'] }}
-      <div *ngFor="let participant of this.events[i].participants">
+      *ngFor="let event of this.eventsForm.get('events').controls; let i = index;" [formGroupName]="i" >
+      <div *ngFor="let participant of this.event_information[i].participants">
       <label>
         <input 
           type="radio" 
           class="form-control" 
-          [formControlName]="user_selection">
+          formControlName="user_selection"
+          [value]="participant.event_participant_id">
         {{ participant.participant_nm }} ({{ participant.country }})
       </label>
       </div>
