@@ -11,7 +11,11 @@ var options = {
 var pgp = require('pg-promise')(options);
 var connectionString = '';
 var config = {
-
+    host: 'localhost',
+    port: 5432,
+    database: 'olympics18',
+    user: 'olympic',
+    password: 'olympic'
 };
 var db = pgp(config);
 

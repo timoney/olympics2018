@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray} from '@angular/forms';
 
 @Component({
   selector: 'app-events',
@@ -17,7 +17,7 @@ export class EventsComponent implements OnInit {
 
   constructor(
     public userService: UserService, 
-    private router: Router ) {}
+    private router: Router) {}
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -42,8 +42,13 @@ export class EventsComponent implements OnInit {
   addEventsToForm() {
     for (var i = 0, len = this.events.length; i < len; i++) {
       console.log(this.events[i]);
-      const control = new FormControl(this.events[i]);
-      (<FormArray>this.eventsForm.get('events')).push(control);
+      const group = new FormGroup({
+        'event_id': this.events[i].event_id,
+        'event_dt': this.events[i].event_dt,
+        'event_nm': this.events[i].event_nm,
+        'user_selection': this.events[i].user_selection,
+      });
+      (<FormArray>this.eventsForm.get('events')).push(group);
     }
   }
 
