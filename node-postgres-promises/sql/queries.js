@@ -19,7 +19,7 @@ var config = {
 };
 var db = pgp(config);
 
-var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=11) e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc';
+var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=11 and d.row_stat_cd=\'ACTIVE\') e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc, points asc';
 
 function getAllUsers(req, res, next) {
   console.log("get all user info");
@@ -54,7 +54,7 @@ function getSingleUser(req, res, next) {
 }
 
 function getUserSelections(req, res, next) {
-  console.log("get selections for user" + req.params.id);
+  console.log("get selections for user: " + req.params.id);
   db.any(eventsQuery, req.params.id)
     .then(function (data) {
       // build event object from result
@@ -64,8 +64,6 @@ function getUserSelections(req, res, next) {
       // loop through all events/participants that are returned
       for (var i = 0, len = data.length; i < len; i++) {
         var curr_event_id = data[i].event_id;
-
-        console.log(data[i]);
         
         // check if we have already created an event object, base on event_id
         var eventObjExists = false;
@@ -97,7 +95,7 @@ function getUserSelections(req, res, next) {
           eventObjs.push({
             'event_id': data[i].event_id,
             'event_nm': data[i].event_nm,
-            'event_dt': data[i].event_dt,
+            'event_dt': data[i].event_dt.toString().substring(0,16),
             'stat_cd': data[i].stat_cd,
             'user_selection': data[i].user_selection,
             'participants': [{
@@ -116,6 +114,33 @@ function getUserSelections(req, res, next) {
           status: 'success',
           data: eventObjs,
           message: 'Retrieved User Selections'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
+// first update all previous selections to INACTIVE
+// then insert new selections
+function updateUserSelections(req, res, next) {
+  var userId = parseInt(req.params.id);
+  var events = req.body.events;
+  console.log('update selections for user id:  ' + userId);
+  db.tx(t => {
+      var queries = [t.none('update user_selection set row_stat_cd=\'INACTIVE\' where user_id=' + userId)];
+      var insertQueries = events.map(user_selection => {
+        return t.none('insert into user_selection (user_id, event_id, event_participant_id, row_stat_cd, creat_ts) values (' 
+                + userId + ', ${event_id}, ${user_selection}, \'ACTIVE\', current_timestamp)', user_selection);
+      });
+      queries = queries.concat(insertQueries);
+      return t.batch(queries);
+    })
+    .then(function () {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Updated user selections'
         });
     })
     .catch(function (err) {
@@ -143,7 +168,6 @@ function createUser(req, res, next) {
 }
 
 function loginUser(req, res, next) {
-  console.log('here0');
   // find the user
   db.one('select user_id, password from user_profile where eml_tx=$1', [req.body.eml_tx])
     .then(data => {
@@ -454,6 +478,7 @@ module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
   getUserSelections: getUserSelections,
+  updateUserSelections: updateUserSelections,
   createUser: createUser,
   updateUser: updateUser,
   removeUser: removeUser,
