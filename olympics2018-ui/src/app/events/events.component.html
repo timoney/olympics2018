@@ -1,54 +1,22 @@
-<!--<h2>Events</h2>
-<div>
-      <div class="event-wrapper form-row" *ngFor="let event of events; let i=index" >
-        <app-event-participants [event_id]="event.event_id"></app-event-participants>
-      </div>
-    <div class="form-row">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</div>
-
-
-<div>
-  <app-event-participants [event_id]="event_id"></app-event-participants>
-</div>-->
 <h3>Form Info:</h3>
 <div>{{eventsForm.value | json}}</div>
 
-<div [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
+<div class="center" [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
   <div formArrayName="events">
-    <h4>Events</h4>
-    <div 
-      class="form-group" 
-      *ngFor="let event of this.eventsForm.get('events').controls; let i = index;" [formGroupName]="i" >
-      <div *ngFor="let participant of this.event_information[i].participants">
-      <label>
-        <input 
-          type="radio" 
-          class="form-control" 
-          formControlName="user_selection"
-          [value]="participant.event_participant_id">
-        {{ participant.participant_nm }} ({{ participant.country }})
-      </label>
-      </div>
-    </div>
+    <h4 class="mat-headline">Events</h4>
+    <mat-card *ngFor="let event of this.eventsForm.get('events').controls; let i = index;" [formGroupName]="i">
+      <mat-card-header>
+        <span class="mat-title">{{ this.event_information[i].event_nm }}</span>  <span class="mat-subheading-1">{{this.event_information[i].event_dt }}</span>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-radio-group class="radio-group" formControlName="user_selection">
+          <mat-radio-button class="radio-button" *ngFor="let participant of this.event_information[i].participants" [value]="participant.event_participant_id">
+              {{ participant.participant_nm }} ({{ participant.country }})
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
-
-<!--
-<div [formGroup]="eventsForm">
-  <div formArrayName="events">
-    <h4>Events</h4>
-    <div *ngFor="let eventControl of eventsForm.get('events').controls; let i = index">
-      {{ eventControl.value['event_nm'] }}
-      <mat-radio-group class="radio-group" [formControlName]="i">
-        <mat-radio-button class="radio-button" *ngFor="let participant of eventControl.value['participants']" [value]="participant.event_participant_id">
-          {{ participant.participant_nm }} ({{ participant.country }})
-        </mat-radio-button>
-      </mat-radio-group>
-      <hr>
-    </div>
-  </div>
-</div>-->
 
 <button class="btn btn-primary" type="submit">Submit</button>
