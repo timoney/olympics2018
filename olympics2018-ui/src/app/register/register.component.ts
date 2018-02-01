@@ -21,7 +21,7 @@ export class RegisterComponent {
     this.userService.register(this.model)
       .subscribe(result => {
         if (result.success === true) {
-          this.router.navigate(['/events']);
+          this.router.navigate(['/home']);
         } else {
           this.errorMsg = result.error;
         }

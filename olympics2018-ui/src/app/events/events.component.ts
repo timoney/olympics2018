@@ -51,7 +51,14 @@ export class EventsComponent implements OnInit {
     }
   }
 
-  submitPicks() {
-    console.log("submitPicks");
+  onSubmit() {
+    this.userService.recordUserEventSelections(this.user.user_id, this.eventsForm.value)
+      .subscribe(result => {
+        if (result.status === "success") {
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = result.error;
+        }
+      });
   }
 }

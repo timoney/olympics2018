@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
           // login successful
           console.log('success at loggin in !');
           this.errorMsg =null;
-          this.router.navigate(['/events']);
+          this.router.navigate(['/home']);
         } else {
           // login failed
           console.log('Username or password is incorrect');

@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { EventsComponent } from './events.component';
 import { EventsRoutingModule } from './events-routing.module';
@@ -18,7 +19,8 @@ import { EventParticipantsComponent } from '../event-participants/event-particip
     ReactiveFormsModule, 
     MatFormFieldModule,
     MatDividerModule,
-    MatCardModule
+    MatCardModule,
+    MatButtonModule
   ],
   declarations: [EventsComponent, EventParticipantsComponent],
   exports: [EventsComponent]

@@ -44,9 +44,16 @@ export class UserService {
         .map(this.handleTokenResponse);
   }
 
-  getUserEventSelections(event_id: number ): Observable<any> {
+  getUserEventSelections(user_id: number): Observable<any> {
     let options = new RequestOptions({ headers: this.getTokenHeader()});
-    return this.http.get(this.api_proxy + 'olympics18/users/' + event_id + '/eventSelections', options)
+    return this.http.get(this.api_proxy + 'olympics18/users/' + user_id + '/eventSelections', options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
+  recordUserEventSelections(user_id: number, selections: any): Observable<any> {
+    let options = new RequestOptions({ headers: this.getTokenHeader()});
+    return this.http.post(this.api_proxy + 'olympics18/users/' + user_id + '/eventSelections', selections, options)
       .map(this.extractData)
       .do(data => console.log('server data:', data))  // debug
       .catch(this.handleError);
