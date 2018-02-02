@@ -1,9 +1,6 @@
-<h3>Form Info:</h3>
-<div>{{eventsForm.value | json}}</div>
-
 <form class="center" [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
   <div formArrayName="events">
-    <h4 class="mat-headline">Events</h4>
+    <h4 class="mat-headline">Picks: {{ this.userDetails.frst_nm }} {{ this.userDetails.lst_nm }}<button type="button" mat-button (click)="back()" color="primary" class="back">Back</button></h4>
     <mat-card *ngFor="let event of this.eventsForm.get('events').controls; let i = index;" [formGroupName]="i">
       <mat-card-header>
         <span class="mat-title">{{ this.event_information[i].event_nm }}</span>  <span class="mat-subheading-1">{{this.event_information[i].event_dt }}</span>

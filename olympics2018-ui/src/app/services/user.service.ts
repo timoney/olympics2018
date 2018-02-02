@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';  // for debugging
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class UserService {
@@ -37,7 +38,7 @@ export class UserService {
     let params = new URLSearchParams();
     params.append('frst_nm', user.frstNm);
     params.append('lst_nm', user.lstNm);
-    params.append('group_nm', user.group)
+    params.append('group_nm', user.group);
     params.append('eml_tx', user.emlTx);
     params.append('password', user.password);
     return this.http.post(this.api_proxy + 'register', params)
@@ -55,10 +56,30 @@ export class UserService {
     let options = new RequestOptions({ headers: this.getTokenHeader()});
     return this.http.post(this.api_proxy + 'olympics18/users/' + user_id + '/eventSelections', selections, options)
       .map(this.extractData)
-      .do(data => console.log('server data:', data))  // debug
       .catch(this.handleError);
   }
 
+  getUserDetails(user_id: number): Observable<any> {
+    let options = new RequestOptions({ headers: this.getTokenHeader()});
+    return this.http.get(this.api_proxy + 'olympics18/users/' + user_id, options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
+  getUserRules(user_id: number): Observable<any> {
+    let options = new RequestOptions({ headers: this.getTokenHeader()});
+    return this.http.get(this.api_proxy + 'olympics18/users/' + user_id + '/rules', options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
+  getUserRanking(): Observable<any> {
+    var user_id = JSON.parse(localStorage.getItem('currentUser')).user_id;
+    let options = new RequestOptions({ headers: this.getTokenHeader()});
+    return this.http.get(this.api_proxy + 'olympics18/users/' + user_id + '/ranking', options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
   logout(): void {
       // clear token remove user from local storage to log user out
       localStorage.removeItem('currentUser');

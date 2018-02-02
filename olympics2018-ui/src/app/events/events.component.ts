@@ -14,6 +14,7 @@ export class EventsComponent implements OnInit {
   user: any;
   eventsForm: FormGroup;
   event_id: number = 1;
+  userDetails: any = {};
 
   constructor(
     public userService: UserService, 
@@ -25,6 +26,7 @@ export class EventsComponent implements OnInit {
       'events': new FormArray([])
     });
 
+    this.getUserDetails();
     this.getEvents();
   }
 
@@ -60,5 +62,19 @@ export class EventsComponent implements OnInit {
           this.errorMessage = result.error;
         }
       });
+  }
+
+  getUserDetails() {
+    this.userService.getUserDetails(this.user.user_id)
+      .subscribe(
+        details => {
+          this.userDetails = details;
+        },
+        error => this.errorMessage = <any>error
+      );
+  }
+
+  back() {
+    this.router.navigate(['/home']);
   }
 }

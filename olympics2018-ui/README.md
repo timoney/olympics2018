@@ -25,3 +25,15 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+TODO:
+1. create leaderboard table
+2. with links to someone elses pick
+3. but shouldn't be able to change it
+4. convert all pages to angular material
+5. add log out functionality
+6. skip login screen if already have valid token
+7. check to make sure tokens expire after a day
+8. get a good color scheme
+9. make forms read only after a certain point of time and remove button to edit
