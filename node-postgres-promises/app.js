@@ -31,10 +31,11 @@ app.use(function(req, res, next) {
 // ensure api request has token for routes that start with /olympics18/
 app.all('/olympics18/*', function(req, res, next) {
   try {
-     console.log(req.get('Authorization'));
+     console.log("Checking Token");
      jwt.verify(req.get('Authorization'), 'secret');
      next();
   } catch(err) {
+    console.log(err);
     return res.json({
       success: false,
       error: "Please supply a token"

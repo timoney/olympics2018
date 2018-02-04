@@ -19,7 +19,7 @@ var config = {
 };
 var db = pgp(config);
 
-var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=11 and d.row_stat_cd=\'ACTIVE\') e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc, points asc';
+var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=$1 and d.row_stat_cd=\'ACTIVE\') e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc, points asc';
 
 function getAllUsers(req, res, next) {
   console.log("get all user info");
@@ -61,6 +61,10 @@ function getUserSelections(req, res, next) {
       var eventObjs = [];
       var event_ids = [];
 
+      var payload = jwt.verify(req.get('Authorization'), 'secret');
+      // if request other persons selections, make them read only
+      var read_only = req.params.id!=payload.user_id;
+
       // loop through all events/participants that are returned
       for (var i = 0, len = data.length; i < len; i++) {
         var curr_event_id = data[i].event_id;
@@ -79,6 +83,7 @@ function getUserSelections(req, res, next) {
         // if event object already exists, just add the participant to the array
         // else create a new event obj
         if (eventObjExists) {
+          eventObjs[j].read_only = read_only;
           eventObjs[j].participants.push({
             'event_participant_id': data[i].event_participant_id,
             'participant_nm': data[i].participant_nm,
@@ -127,6 +132,26 @@ function updateUserSelections(req, res, next) {
   var userId = parseInt(req.params.id);
   var events = req.body.events;
   console.log('update selections for user id:  ' + userId);
+
+  // if request is to edit someone elses picks, don't allow
+  var payload = jwt.verify(req.get('Authorization'), 'secret');
+  var isOtherPerson = req.params.id!=payload.user_id;
+
+  // if it is past feb 9, you can't edit picks
+  var currDate = new Date();
+  var targetDate = new Date('February 10, 2018 11:00:00');
+  var isTooLateToEdit = currDate > targetDate;
+
+  if (isOtherPerson || isTooLateToEdit) {
+    console.log(isOtherPerson);
+    console.log(isTooLateToEdit);
+    return res.json({
+      status: 'failure',
+      message: 'Can\'t update selections'
+    });
+  }
+
+
   db.tx(t => {
       var queries = [t.none('update user_selection set row_stat_cd=\'INACTIVE\' where user_id=' + userId)];
       var insertQueries = events.map(user_selection => {
@@ -167,19 +192,34 @@ function createUser(req, res, next) {
     });
 }
 
+function getUserRules(req, res, next) {
+  console.log("get rules for user" + req.params.id);
+  db.one("select value as rules from user_profile a " + 
+          "inner join config b " + 
+            "on a.group_nm=b.key " +
+          "where a.user_id=" + req.params.id +" and type=\'RULES\'")
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved Rules'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
 function loginUser(req, res, next) {
   // find the user
   db.one('select user_id, password from user_profile where eml_tx=$1', [req.body.eml_tx])
     .then(data => {
-      console.log('here1');
       if (!data) {
-          console.log('here2');
           res.json({ success: false, error: 'Authentication failed. User not found.' });
       } else if (!bcrypt.compareSync(req.body.password, data.password)) {
-          console.log('here3 ');
           res.json({ success: false, error: 'Authentication failed. Wrong password.' });
       } else {
-          console.log('here4');
           var user = { user_id: data.user_id };
           var token = jwt.sign(user, 'secret', {
               expiresIn : 60*60*24 // expires in 24 hours
@@ -229,7 +269,6 @@ function removeUser(req, res, next) {
 }
 
 function getAllEvents(req, res, next) {
-  console.log("here");
   db.any('select * from event')
     .then(function (data) {
       res.status(200)
@@ -474,10 +513,49 @@ function removeUserSelection(req, res, next) {
     });
 }
 
+function getUserRanking(req, res, next) {
+  console.log('Get user ranking for user_id: ');
+  console.log(req.params);
+  var userId = parseInt(req.params.id);
+  var query = 'select ' + 
+          'row_number() OVER () as position, ' +
+          'a.frst_nm || \' \' || a.lst_nm as name, ' +
+          'a.user_id, ' +
+          'sum( ' +
+          '  case when c.finish = 1 then c.points ' +
+          '       when c.finish = 2 then 2 ' +  
+          '     when c.finish = 3 then 1 ' + 
+          '     else 0 ' +
+          '  end  ' +
+          ') as points  ' +
+          'from user_profile a ' +
+          'inner join user_selection b ' +
+          'on a.user_id=b.user_id ' +
+          'inner join event_participant c ' +
+          'on b.event_participant_id=c.event_participant_id ' +
+          'where a.group_nm=(select group_nm from user_profile where user_id=' + userId + ') and b.row_stat_cd=\'ACTIVE\' ' +
+          'group by name, a.user_id order by points desc';
+  console.log(query);
+  db.any(query)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved Ranking'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
   getUserSelections: getUserSelections,
+  getUserRules: getUserRules,
+  getUserRanking: getUserRanking,
   updateUserSelections: updateUserSelections,
   createUser: createUser,
   updateUser: updateUser,
