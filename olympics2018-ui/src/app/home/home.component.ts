@@ -4,7 +4,6 @@ import { MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 
-
 import { UserService } from '../services/user.service';
 
 @Component({

@@ -20,8 +20,9 @@ export class RegisterComponent {
   register() {
     this.userService.register(this.model)
       .subscribe(result => {
+        console.log(result);
         if (result.success === true) {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/picks', result.user_id]);
         } else {
           this.errorMsg = result.error;
         }

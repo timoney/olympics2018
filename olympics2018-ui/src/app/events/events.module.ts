@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { EventsComponent } from './events.component';
 import { EventsRoutingModule } from './events-routing.module';
-import { EventParticipantsComponent } from '../event-participants/event-participants.component'
 
 @NgModule({
   imports: [
@@ -22,7 +21,7 @@ import { EventParticipantsComponent } from '../event-participants/event-particip
     MatCardModule,
     MatButtonModule
   ],
-  declarations: [EventsComponent, EventParticipantsComponent],
+  declarations: [EventsComponent],
   exports: [EventsComponent]
 })
 export class EventsModule { }

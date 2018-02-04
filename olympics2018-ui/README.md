@@ -28,11 +28,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 TODO:
-1. create leaderboard table
-2. with links to someone elses pick
 3. but shouldn't be able to change it
 4. convert all pages to angular material
-5. add log out functionality
+5. add log out functionality (hide it)
 6. skip login screen if already have valid token
 7. check to make sure tokens expire after a day
 8. get a good color scheme

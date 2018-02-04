@@ -80,6 +80,7 @@ export class UserService {
       .map(this.extractData)
       .catch(this.handleError);
   }
+
   logout(): void {
       // clear token remove user from local storage to log user out
       localStorage.removeItem('currentUser');
@@ -96,7 +97,7 @@ export class UserService {
         localStorage.setItem('currentUser', JSON.stringify({ 'user_id': res.json().user_id, 'token': token }));
 
         // return true to indicate successful login
-        return {success: true};
+        return {success: true, 'user_id': res.json().user_id};
     } else {
         // return false to indicate failed login
         return res.json();

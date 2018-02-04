@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +11,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AppComponent implements OnInit {
   title = '2018 Winter Olympics- PyeongChang';
 
-  constructor(private router: Router) {}
-
-  isLoggedIn$: Observable<boolean>; 
+  constructor(private router: Router, private authService: AuthService ) {}
 
   ngOnInit() {
-    this.isLoggedIn$ = this.authService.isLoggedIn; 
+    //this.isLoggedIn$ = this.authService.isLoggedIn; 
   }
 
   logout() {

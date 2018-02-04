@@ -10,6 +10,7 @@ import { FormGroup, FormControl, FormArray} from '@angular/forms';
 })
 export class EventsComponent implements OnInit {
   event_information: any;
+  read_only: boolean = false;
   errorMessage: any;
   user_id: number;
   user: any;
@@ -40,6 +41,7 @@ export class EventsComponent implements OnInit {
       .subscribe(
         events => {
           this.event_information = events; 
+          this.read_only = this.event_information[0].read_only;
           this.addEventsToForm();
         },
         error => this.errorMessage = <any>error
@@ -52,7 +54,7 @@ export class EventsComponent implements OnInit {
         'event_id': new FormControl(this.event_information[i].event_id),
         'event_dt': new FormControl(this.event_information[i].event_dt),
         'event_nm': new FormControl(this.event_information[i].event_nm),
-        'user_selection': new FormControl(this.event_information[i].user_selection)
+        'user_selection': new FormControl({value: this.event_information[i].user_selection, disabled: this.read_only})
       });
       (<FormArray>this.eventsForm.get('events')).push(group);
     }

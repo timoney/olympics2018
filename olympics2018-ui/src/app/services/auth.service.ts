@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -19,12 +20,9 @@ export class AuthService implements CanActivate {
 
     canActivate() {
         if (localStorage.getItem('currentUser')) {
-            console.log('Auth Found!');
             // logged in so return true
             return true;
         }
-        console.log('Auth not Found!');
-
         // not logged in so redirect to login page
         this.router.navigate(['/login']);
         return false;
