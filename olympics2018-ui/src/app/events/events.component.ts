@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, FormArray} from '@angular/forms';
 
@@ -11,6 +11,7 @@ import { FormGroup, FormControl, FormArray} from '@angular/forms';
 export class EventsComponent implements OnInit {
   event_information: any;
   errorMessage: any;
+  user_id: number;
   user: any;
   eventsForm: FormGroup;
   event_id: number = 1;
@@ -18,10 +19,14 @@ export class EventsComponent implements OnInit {
 
   constructor(
     public userService: UserService, 
-    private router: Router) {}
+    private router: Router,
+    private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    this.route.params.subscribe(params => { 
+      this.user_id = +params['id']; 
+    });  
+
     this.eventsForm = new FormGroup({
       'events': new FormArray([])
     });
@@ -31,7 +36,7 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.userService.getUserEventSelections(this.user.user_id)
+    this.userService.getUserEventSelections(this.user_id)
       .subscribe(
         events => {
           this.event_information = events; 
@@ -54,7 +59,7 @@ export class EventsComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.recordUserEventSelections(this.user.user_id, this.eventsForm.value)
+    this.userService.recordUserEventSelections(this.user_id, this.eventsForm.value)
       .subscribe(result => {
         if (result.status === "success") {
           this.router.navigate(['/home']);
@@ -65,13 +70,13 @@ export class EventsComponent implements OnInit {
   }
 
   getUserDetails() {
-    this.userService.getUserDetails(this.user.user_id)
+    this.userService.getUserDetails(this.user_id)
       .subscribe(
         details => {
           this.userDetails = details;
         },
         error => this.errorMessage = <any>error
-      );
+      ); 
   }
 
   back() {

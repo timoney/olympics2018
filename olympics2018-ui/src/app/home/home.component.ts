@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.userCredentials = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(this.userCredentials);
     this.getUserDetails();
     this.getUserRules();
   }
@@ -54,7 +53,7 @@ export class HomeComponent implements OnInit {
   }
 
   editPicks() {
-    this.router.navigate(['/events']);
+    this.router.navigate(['/picks', this.userCredentials.user_id]);
   }
 
 }
