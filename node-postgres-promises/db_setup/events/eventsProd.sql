@@ -28,7 +28,7 @@ Biathlon- Women's 7.5km Sprint
   Denise Herrmann (GER) +750*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Biathlon- Women\'s 7.5km Sprint', '2018-02-10', 'NOT_STARTED');
+VALUES ('Biathlon- Women''s 7.5km Sprint', '2018-02-10', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Anastasiya Kuzmina', 'SVK', 8, 0.0, null);
@@ -53,7 +53,7 @@ Luge- Men's Singles ****
   Roman Repilov(OAR)  +800*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Luge- Men\'s Singles', '2018-02-11', 'NOT_STARTED');
+VALUES ('Luge- Men''s Singles', '2018-02-11', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Felix Loch', 'GER', 6, 0.0, null);
@@ -76,7 +76,7 @@ Alpine Skiing- Ladies' Giant Slalom
   Sofia Goggia (ITA) +1600*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Alpine Skiing- Ladies\' Giant Slalom', '2018-02-12', 'NOT_STARTED');
+VALUES ('Alpine Skiing- Ladies'' Giant Slalom', '2018-02-12', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Mikaela Shiffrin', 'USA', 8, 0.0, null);
@@ -128,7 +128,7 @@ Snowboard- Men's Halfpipe
   Scotty James 11 AUS*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Snowboard- Men\'s Halfpipe', '2018-02-14', 'NOT_STARTED');
+VALUES ('Snowboard- Men''s Halfpipe', '2018-02-14', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Shaun White', 'USA', 7, 0.0, null);
@@ -178,7 +178,7 @@ Cross-Country Skiiing- Men's 15km Free
   Simen Hegstad Krüger (NOR) +900 */
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Cross-Country Skiiing- Men\'s 15km Free', '2018-02-16', 'NOT_STARTED');
+VALUES ('Cross-Country Skiiing- Men''s 15km Free', '2018-02-16', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Maurice Manificat', 'FRA', 12, 0.0, null);
@@ -223,7 +223,7 @@ Freestyle Skiing- Men's Aerials
   Zongyang Jia 5.50 (CHN)*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Freestyle Skiing- Men\'s Aerials', '2018-02-18', 'NOT_STARTED');
+VALUES ('Freestyle Skiing- Men''s Aerials', '2018-02-18', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Guangpu Qi', 'CHN', 7, 0.0, null);
@@ -290,7 +290,7 @@ Freestyle Skiing- Men's Ski Cross
   Victor Oehling Norberg (SWE)9.00*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Freestyle Skiing- Men\'s Ski Cross', '2018-02-21', 'NOT_STARTED');
+VALUES ('Freestyle Skiing- Men''s Ski Cross', '2018-02-21', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Marc Bischofberger', 'SUI', 13, 0.0, null);
@@ -335,7 +335,7 @@ Speed Skating- Men's 1,000m
   Koen Verweij 11.00 (NED)*/
 
 INSERT INTO event (event_nm, event_dt, stat_cd)
-VALUES ('Speed Skating- Men\'s 1,000m', '2018-02-23', 'NOT_STARTED');
+VALUES ('Speed Skating- Men''s 1,000m', '2018-02-23', 'NOT_STARTED');
 
 INSERT INTO event_participant (event_id, participant_nm, country, points, odds, finish)
 VALUES ((select max(event_id) from event), 'Kjeld Nuis', 'NED', 6, 0.0, null);
