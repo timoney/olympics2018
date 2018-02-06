@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';  // for debugging
@@ -11,7 +12,9 @@ export class UserService {
 
   public token: string;
 
-  public api_proxy: string = 'http://localhost:3000/';
+  public api_proxy: string = 'https://lf2sc7ye8l.execute-api.us-east-2.amazonaws.com/olympic_api/';
+
+  public loggedIn = new BehaviorSubject<boolean>(false); // {1}
 
   constructor(private http: Http) {}
 
@@ -30,7 +33,6 @@ export class UserService {
       params.append('eml_tx', email);
       params.append('password', password);
       return this.http.post(this.api_proxy + 'login', params)
-          //.do(data => console.log('server data:', data))  // debug
           .map(this.handleTokenResponse);
   }
 
@@ -81,9 +83,14 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  get isLoggedIn() {
+    return this.loggedIn.asObservable(); // {2}
+  }
+
   logout(): void {
-      // clear token remove user from local storage to log user out
-      localStorage.removeItem('currentUser');
+    this.loggedIn.next(false);
+    // clear token remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
   }
 
   private handleTokenResponse(res: Response) {
@@ -97,9 +104,11 @@ export class UserService {
         localStorage.setItem('currentUser', JSON.stringify({ 'user_id': res.json().user_id, 'token': token }));
 
         // return true to indicate successful login
+        //this.thisObj.loggedIn.next(true);
         return {success: true, 'user_id': res.json().user_id};
     } else {
         // return false to indicate failed login
+        //this.thisObj.loggedIn.next(false);
         return res.json();
     }
   }

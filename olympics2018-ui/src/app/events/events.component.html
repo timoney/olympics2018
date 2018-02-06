@@ -1,15 +1,26 @@
-{{ this.user_id}}
 <form class="center" [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
   <div formArrayName="events">
-    <h4 class="mat-headline">Picks: {{ this.userDetails.frst_nm }} {{ this.userDetails.lst_nm }}<a (click)="back()" class="back">Back</a></h4>
-    <mat-card *ngFor="let event of this.eventsForm.get('events').controls; let i = index;" [formGroupName]="i">
+    <h4 class="mat-headline">Picks: {{ this.userDetails.frst_nm }} {{ this.userDetails.lst_nm }}<a (click)="back()" class="back mat-subheading-2">Back</a></h4>
+    <mat-card class="mat-primary">
+      <div>
+        <p>
+          <span class="mat-title">Scoring</span> <br /> 
+          1. Pick one athlete/country per event<br /> 
+          2. If your pick gets 1st place you get the number of points in <span class="olympic-red">red</span><br /> 
+          3. If your pick gets 2nd place you get 2 points<br /> 
+          4. If your pick gets 3rd place you get 1 point<br /> 
+          5. Don't forget to click the Save button! <br /> 
+        </p>
+      </div>
+    </mat-card>
+    <mat-card *ngFor="let event of getEventControls(eventsForm); let i = index;" [formGroupName]="i" class="card">
       <mat-card-header>
-        <span class="mat-title">{{ this.event_information[i].event_nm }}</span>  <span class="mat-subheading-1">{{this.event_information[i].event_dt }}</span>
+        <span class="mat-title">{{ this.event_information[i].event_nm }}</span>  <span class="mat-subheading-1 back">{{this.event_information[i].event_dt }}</span>
       </mat-card-header>
       <mat-card-content>
         <mat-radio-group class="radio-group" formControlName="user_selection">
-          <mat-radio-button class="radio-button" *ngFor="let participant of this.event_information[i].participants" [value]="participant.event_participant_id">
-              {{ participant.participant_nm }} <span *ngIf="participant.country" >({{ participant.country }}) </span> {{ participant.points }} point<span *ngIf="participant.points > 1">s</span>
+          <mat-radio-button class="shift-right" *ngFor="let participant of this.event_information[i].participants" [value]="participant.event_participant_id">
+              {{ participant.participant_nm }} <span *ngIf="participant.country" >({{ participant.country }}) </span> <span class="olympic-red">{{ participant.points }} point<span *ngIf="participant.points > 1">s</span></span>
           </mat-radio-button>
         </mat-radio-group>
       </mat-card-content>

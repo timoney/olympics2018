@@ -81,6 +81,10 @@ export class EventsComponent implements OnInit {
       ); 
   }
 
+  getEventControls(eventsForm) {
+    return eventsForm.get('events').controls;
+  }
+
   back() {
     this.router.navigate(['/home']);
   }

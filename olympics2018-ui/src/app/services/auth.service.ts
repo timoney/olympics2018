@@ -1,29 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService implements CanActivate {
 
-    private loggedIn = new BehaviorSubject<boolean>(false);
-
-    constructor(private router: Router) { }
-
-    isLoggedIn() {
-        if (localStorage.getItem('currentUser')) {
-            this.loggedIn.next(true);
-        } else {
-            this.loggedIn.next(false);
-        }
-        return this.loggedIn.asObservable();
-    }
+    constructor(private router: Router, private userService: UserService) { }
 
     canActivate() {
         if (localStorage.getItem('currentUser')) {
             // logged in so return true
+            this.userService.loggedIn.next(true);
             return true;
         }
         // not logged in so redirect to login page
+        this.userService.loggedIn.next(false);
         this.router.navigate(['/login']);
         return false;
     }

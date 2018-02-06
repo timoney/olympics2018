@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <span class="title">{{ title }}</span>
     <span class="spacer"></span>
-    <a class="logout" mat-button (click)="logout()">Log Out</a>
+    <a *ngIf="isLoggedIn$ | async" class="logout" mat-button (click)="logout()">Log Out</a>
   </mat-toolbar-row>
 </mat-toolbar>
 

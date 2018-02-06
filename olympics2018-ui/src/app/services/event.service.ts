@@ -10,7 +10,7 @@ export class EventService {
 
   public token: string;
 
-  public api_proxy: string = 'http://localhost:3000/olympics18/';
+  public api_proxy: string = 'http://ec2-13-59-65-197.us-east-2.compute.amazonaws.com:3000/';
 
   constructor(private http: Http) {}
 

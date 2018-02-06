@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.userCredentials = JSON.parse(localStorage.getItem('currentUser'));
     this.getUserDetails();
-    this.getUserRules();
   }
 
   getUserDetails() {
@@ -36,16 +35,6 @@ export class HomeComponent implements OnInit {
         details => {
           this.userDetails = details;
           this.group_nm=details.group_nm;
-        },
-        error => this.errorMessage = <any>error
-      );
-  }
-
-  getUserRules() {
-    this.userService.getUserRules(this.userCredentials.user_id)
-      .subscribe(
-        rules => {
-          this.rules = rules.rules;
         },
         error => this.errorMessage = <any>error
       );

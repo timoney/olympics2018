@@ -4,7 +4,7 @@
   margin: 0px 0px 0px 15px;
 }
 
-.radio-button {
+.shift-right {
   margin: 2px;
   left: 20px;
 }
@@ -17,4 +17,18 @@
 
 .back {
   float: right;
+}
+
+.shift-right {
+  margin: 2px;
+  left: 50px;
+}
+
+.card {
+
+}
+
+.olympic-red {
+  color: #d50000;
+  font-weight:bold;
 }

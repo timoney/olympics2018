@@ -9,7 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 
-import { WelcomeModule } from './welcome/welcome.module';
 import { LoginModule } from './login/login.module';
 import { RegisterModule } from './register/register.module';
 import { HomeModule } from './home/home.module';
@@ -29,7 +28,6 @@ import { AuthService } from './services/auth.service';
     AlertModule.forRoot(),
     HttpModule,
     BrowserModule,
-    WelcomeModule,
     LoginModule,
     RegisterModule,
     HomeModule,

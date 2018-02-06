@@ -28,10 +28,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 TODO:
-3. but shouldn't be able to change it
-4. convert all pages to angular material
 5. add log out functionality (hide it)
-6. skip login screen if already have valid token
 7. check to make sure tokens expire after a day
 8. get a good color scheme
 9. make forms read only after a certain point of time and remove button to edit
