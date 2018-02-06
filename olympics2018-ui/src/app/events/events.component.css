@@ -19,9 +19,8 @@
   float: right;
 }
 
-.shift-right {
-  margin: 2px;
-  left: 50px;
+.shift-right2 {
+  margin-left: 20px
 }
 
 .card {
