@@ -1,4 +1,4 @@
-<form class="center" [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
+<form class="col-md-10 col-md-offset-1" [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
   <div formArrayName="events">
     <h4 class="mat-headline">Picks: {{ this.userDetails.frst_nm }} {{ this.userDetails.lst_nm }}<a (click)="back()" class="back mat-subheading-2">Back</a></h4>
     <mat-card class="mat-primary">

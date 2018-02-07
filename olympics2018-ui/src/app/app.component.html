@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row class="row">
     <div class="col-md-4 col-md-offset-1">{{ title }}</div>
-    <div class="col-md-2 col-md-offset-3">
+    <div class="col-md-2 col-md-offset-5">
       <a *ngIf="isLoggedIn$ | async" class="logout" mat-button (click)="logout()">Log Out</a>
     </div>
   </mat-toolbar-row>
