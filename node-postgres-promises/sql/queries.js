@@ -11,7 +11,11 @@ var options = {
 var pgp = require('pg-promise')(options);
 var connectionString = '';
 var config = {
-
+    host: 'olympics2018.c2jtspwbi6gb.us-east-2.rds.amazonaws.com',
+    port: 5432,
+    database: 'olympics',
+    user: 'Olympicuser2018',
+    password: 'Lad85j8kn'
 };
 var db = pgp(config);
 
@@ -172,6 +176,8 @@ function updateUserSelections(req, res, next) {
 function createUser(req, res, next) {
   var hash = bcrypt.hashSync(req.body.password, 10);
   req.body.password = hash;
+  req.body.eml_tx = req.body.eml_tx.toLowerCase();  
+
   db.one('insert into user_profile ' + 
       '(FRST_NM, LST_NM, EML_TX, GROUP_NM, PASSWORD) ' +
       'values($1, $2, $3, $4, $5) RETURNING USER_ID',
@@ -208,6 +214,7 @@ function getUserRules(req, res, next) {
 }
 
 function loginUser(req, res, next) {
+  req.body.eml_tx = req.body.eml_tx.toLowerCase();
   // find the user
   db.one('select user_id, password from user_profile where eml_tx=$1', [req.body.eml_tx])
     .then(data => {
