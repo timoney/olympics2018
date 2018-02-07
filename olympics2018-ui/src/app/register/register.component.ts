@@ -28,4 +28,8 @@ export class RegisterComponent {
         }
       });
   }
+
+  goHome() {
+    this.router.navigate(['/']);
+  }
 }
