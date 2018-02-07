@@ -1,8 +1,8 @@
-<div class="center">
-  <img src="../../assets/images/PyeongChang_2018_Winter_Olympics.svg" class="logo col-md-offset-4">
+<div >
+  <img src="../../assets/images/PyeongChang_2018_Winter_Olympics.svg" class="logo col-md-offset-5">
   <!--<button mat-raised-button color="primary" (click)="editPicks()">Edit Picks</button>-->
-  <h3 class="subheading-2">Leaderboard: {{ this.userDetails.group_nm }} </h3>
-  <div class="example-container mat-elevation-z8">
+  <div class="example-container mat-elevation-z2 col-md-8 col-md-offset-2 ">
+    <h3 class="subheading-2">Leaderboard: {{ this.userDetails.group_nm }} </h3>
     <mat-table #table [dataSource]="dataSource" matSort>
       <!-- Position Column -->
       <ng-container matColumnDef="position">

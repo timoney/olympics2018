@@ -31,3 +31,6 @@ TODO:
 1. make forms read only after a certain point of time and remove button to edit
 2. center card
 3. make sure express app doesnt close when disconnect
+
+1. tolowercase email
+2. make more mobile friendly
