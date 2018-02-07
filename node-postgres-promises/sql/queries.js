@@ -527,7 +527,7 @@ function getUserRanking(req, res, next) {
           '  end  ' +
           ') as points  ' +
           'from user_profile a ' +
-          'inner join user_selection b ' +
+          'left join user_selection b ' +
           'on a.user_id=b.user_id ' +
           'inner join event_participant c ' +
           'on b.event_participant_id=c.event_participant_id ' +
