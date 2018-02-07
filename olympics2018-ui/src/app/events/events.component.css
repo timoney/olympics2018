@@ -23,11 +23,19 @@
   margin-left: 20px
 }
 
-.card {
-
-}
-
 .olympic-red {
   color: #d50000;
   font-weight:bold;
+}
+
+.event-name {
+  float: left;
+}
+
+.event-date {
+  float: right;
+}
+
+.header-container {
+  width: 100%;
 }

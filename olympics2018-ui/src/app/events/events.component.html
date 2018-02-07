@@ -19,7 +19,9 @@
     </mat-card>
     <mat-card *ngFor="let event of getEventControls(eventsForm); let i = index;" [formGroupName]="i" class="card">
       <mat-card-header>
-        <span class="mat-title">{{ this.event_information[i].event_nm }}</span>  <span class="mat-subheading-1 back">{{this.event_information[i].event_dt }}</span>
+        <div class="header-container">
+          <span class="mat-title event-name">{{ this.event_information[i].event_nm }}</span>  <span class="mat-subheading-1 event-date">{{this.event_information[i].event_dt }}</span>
+        </div>
       </mat-card-header>
       <mat-card-content>
         <mat-radio-group class="radio-group" formControlName="user_selection">
