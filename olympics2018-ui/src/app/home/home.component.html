@@ -13,7 +13,15 @@
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-        <mat-cell *matCellDef="let element"> <a [routerLink]="['/picks', element.user_id]">{{element.name}} </a></mat-cell>
+        <mat-cell *matCellDef="let element"> 
+          <div *ngIf="element.user_id===this.userCredentials.user_id; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <a [routerLink]="['/picks', element.user_id]">{{element.name}} </a>
+            </ng-template>
+            <ng-template #elseBlock>
+              {{element.name}} 
+            </ng-template>
+        </mat-cell>
       </ng-container>
 
       <!-- Points Column -->
