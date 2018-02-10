@@ -14,7 +14,7 @@
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
         <mat-cell *matCellDef="let element"> 
-          <div *ngIf="element.user_id===this.userCredentials.user_id; then thenBlock else elseBlock"></div>
+          <div *ngIf="true; then thenBlock else elseBlock"></div>
             <ng-template #thenBlock>
               <a [routerLink]="['/picks', element.user_id]">{{element.name}} </a>
             </ng-template>

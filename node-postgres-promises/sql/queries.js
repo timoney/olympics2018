@@ -515,24 +515,31 @@ function getUserRanking(req, res, next) {
   console.log('Get user ranking for user_id: ');
   console.log(req.params);
   var userId = parseInt(req.params.id);
-  var query = 'select ' +
-              'row_number() OVER () as position,  ' +
-              'a.frst_nm || \' \' || a.lst_nm as name,  ' +
-              'a.user_id,  ' +
-              'sum(  ' +
-              'case when c.finish = 1 then c.points  ' +
-              '       when c.finish = 2 then 2   ' +
-              '     when c.finish = 3 then 1   ' +
-              '     else 0  ' +
-              '  end   ' +
-              ') as points   ' +
-              'from user_profile a  ' +
-              'left join user_selection b  ' +
-              'on a.user_id=b.user_id  ' +
-              'left join event_participant c  ' +
-              'on b.event_participant_id=c.event_participant_id ' + 
-              'where a.group_nm=(select group_nm from user_profile where user_id=' + userId + ') and (b.row_stat_cd=\'ACTIVE\' or b.row_stat_cd is null) ' +
-              'group by name, a.user_id order by points desc'
+  var query = 'select  ' + 
+              'row_number() OVER () as position,  ' + 
+              'name,  ' + 
+              'user_id,  ' + 
+              'points  ' + 
+              'from ( ' + 
+              '  select  ' + 
+              '  a.frst_nm || \' \' || a.lst_nm as name,   ' + 
+              '  a.user_id,   ' + 
+              '  sum(  ' + 
+              '  case when c.finish = 1 then c.points  ' + 
+              '         when c.finish = 2 then 2  ' +  
+              '       when c.finish = 3 then 1 ' +   
+              '       else 0  ' + 
+              '   end  ' +  
+              ' ) as points   ' + 
+              '  from user_profile a  ' +  
+              '  left join user_selection b   ' + 
+              '  on a.user_id=b.user_id   ' + 
+              '  left join event_participant c   ' + 
+              '  on b.event_participant_id=c.event_participant_id  ' + 
+              '  where a.group_nm=(select group_nm from user_profile where user_id=' + userId + ') and (b.row_stat_cd=\'ACTIVE\' or b.row_stat_cd is null)  ' + 
+              '  group by name, a.user_id ' + 
+              ' order by points desc ' + 
+              ') d';
   console.log(query);
   db.any(query)
     .then(function (data) {

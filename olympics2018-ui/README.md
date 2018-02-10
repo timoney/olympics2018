@@ -34,3 +34,22 @@ TODO:
 
 1. tolowercase email
 2. make more mobile friendly
+
+select frst_nm, lst_nm, c.event_nm, d.participant_nm from user_profile a
+inner join user_selection b
+  on a.user_id=b.user_id
+inner join event c
+  on b.event_id=c.event_id
+inner join event_participant d
+  on b.event_participant_id=d.event_participant_id;
+
+select frst_nm, lst_nm, c.event_nm, count(*) 
+from user_profile a
+inner join user_selection b
+  on a.user_id=b.user_id
+inner join event c
+  on b.event_id=c.event_id
+inner join event_participant d
+  on b.event_participant_id=d.event_participant_id
+group by frst_nm, lst_nm, event_nm
+order by count(*) desc;

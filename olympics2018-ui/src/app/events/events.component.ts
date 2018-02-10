@@ -41,7 +41,7 @@ export class EventsComponent implements OnInit {
       .subscribe(
         events => {
           this.event_information = events; 
-          this.read_only = this.event_information[0].read_only;
+          this.read_only = true;
           this.addEventsToForm();
         },
         error => this.errorMessage = <any>error
