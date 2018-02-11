@@ -15,7 +15,7 @@ var config = {
 };
 var db = pgp(config);
 
-var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, a.winner_url, a.recap_url, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=$1 and d.row_stat_cd=\'ACTIVE\') e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc, points asc';
+var eventsQuery = 'select a.event_id, a.event_nm, a.event_dt, a.stat_cd, a.winner_url, a.recap_url, a.img_height, a.img_width, b.event_participant_id, b.participant_nm, b.country, b.points, b.odds, b.finish, e.event_participant_id as user_selection from event a inner join event_participant b on a.event_id=b.event_id left join (select d.event_id, d.event_participant_id from user_profile c inner join user_selection d on c.user_id=d.user_id where c.user_id=$1 and d.row_stat_cd=\'ACTIVE\') e on a.event_id=e.event_id and b.event_participant_id=e.event_participant_id order by event_dt asc, event_id asc, points asc';
 
 function getAllUsers(req, res, next) {
   console.log("get all user info");
@@ -101,6 +101,8 @@ function getUserSelections(req, res, next) {
             'user_selection': data[i].user_selection,
             'winner_url': data[i].winner_url,
             'recap_url': data[i].recap_url,
+            'img_height': data[i].img_height,
+            'img_width': data[i].img_width,
             'participants': [{
               'event_participant_id': data[i].event_participant_id,
               'participant_nm': data[i].participant_nm,

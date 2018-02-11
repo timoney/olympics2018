@@ -24,16 +24,23 @@
         </div>
       </mat-card-header>
       <mat-card-content>
-        <mat-radio-group class="radio-group" formControlName="user_selection">
-          <mat-radio-button class="shift-right" *ngFor="let participant of this.event_information[i].participants" [value]="participant.event_participant_id">
-              {{ participant.participant_nm }} 
-              <span *ngIf="participant.country" >({{ participant.country }}) </span>
-              <span >{{ participant.points }} point<span *ngIf="participant.points > 1">s</span></span> 
-              <div [ngClass]="getMedal(participant.finish)"></div>
-              <span *ngIf="event_information[i].user_selection === participant.event_participant_id" class="green">{{ getPoints(participant.finish, participant.points) }}</span>
-              {{ event_information[i].winner_url }} {{ event_information[i].recap_url }}
-          </mat-radio-button>
-        </mat-radio-group>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-radio-group class="radio-group" formControlName="user_selection">
+              <mat-radio-button class="shift-right" *ngFor="let participant of this.event_information[i].participants" [value]="participant.event_participant_id">
+                  {{ participant.participant_nm }} 
+                  <span *ngIf="participant.country" >({{ participant.country }}) </span>
+                  <span >{{ participant.points }} point<span *ngIf="participant.points > 1">s</span></span> 
+                  <div [ngClass]="getMedal(participant.finish)"></div>
+                  <span *ngIf="event_information[i].user_selection === participant.event_participant_id" class="green">{{ getPoints(participant.finish, participant.points) }}</span>
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div *ngIf="event_information[i].winner_url" class="col-md-2">
+            <a [href]="event_information[i].recap_url" target="_blank">Recap</a>
+            <img [src]="event_information[i].winner_url" [height]="event_information[i].img_height" width="event_information[i].img_width">
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
