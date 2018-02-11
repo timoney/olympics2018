@@ -41,6 +41,7 @@ export class EventsComponent implements OnInit {
       .subscribe(
         events => {
           this.event_information = events; 
+          console.log(events);
           this.read_only = true;
           this.addEventsToForm();
         },

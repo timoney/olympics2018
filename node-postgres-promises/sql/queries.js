@@ -99,6 +99,8 @@ function getUserSelections(req, res, next) {
             'event_dt': data[i].event_dt.toString().substring(0,16),
             'stat_cd': data[i].stat_cd,
             'user_selection': data[i].user_selection,
+            'winner_url': data[i].winner_url,
+            'recap_url': data[i].recap_url,
             'participants': [{
               'event_participant_id': data[i].event_participant_id,
               'participant_nm': data[i].participant_nm,
