@@ -7,3 +7,7 @@ CREATE TABLE event (
 
 ALTER TABLE event ADD COLUMN winner_url varchar(100);
 ALTER TABLE event ADD COLUMN recap_url varchar(100);
+ALTER TABLE event ALTER COLUMN winner_url TYPE varchar(500);
+ALTER TABLE event ALTER COLUMN recap_url TYPE varchar(500);
+ALTER TABLE event ADD COLUMN img_height varchar(50);
+ALTER TABLE event ADD COLUMN img_width varchar(50);
