@@ -85,6 +85,26 @@ export class EventsComponent implements OnInit {
     return eventsForm.get('events').controls;
   }
 
+  getMedal(finish) {
+    if (finish === 1)
+      return "circle gold";
+    else if (finish === 2)
+      return "circle silver";
+    else if (finish === 3)
+      return "cirlce bronze";
+    else return "";
+  }
+
+  getPoints(finish, points) {
+    if (finish === 1)
+      return "+" + points + " points";
+    else if (finish === 2)  
+      return "+2 points";
+    else if (finish === 3)
+      return "+1 point";
+    else return "";
+  }
+
   back() {
     this.router.navigate(['/home']);
   }

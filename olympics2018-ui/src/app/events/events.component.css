@@ -39,3 +39,29 @@
 .header-container {
   width: 100%;
 }
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.gold {
+  background: #FFD700;
+}
+
+.silver {
+  background: #c0c0c0;
+}
+
+.bronze {
+  background: #cd7f32;
+}
+
+.green {
+  color: #00CC00;
+  font-weight:bold;
+}
+
+
