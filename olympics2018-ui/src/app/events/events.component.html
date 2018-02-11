@@ -7,7 +7,7 @@
           <span class="mat-title">How it Works</span> <br /> 
           1. There is one event per day <br /> 
           2. Pick one athlete/country per event<br /> 
-          3. If your pick gets 1st place add the number of points in <span class="olympic-red">red</span> to total<br /> 
+          3. If your pick gets 1st place add the number of points to total<br /> 
           4. If your pick gets 2nd place add 2 points to total<br /> 
           5. If your pick gets 3rd place add 1 point to total<br /> 
           6. Person with the most total points wins <br />
@@ -28,9 +28,10 @@
           <mat-radio-button class="shift-right" *ngFor="let participant of this.event_information[i].participants" [value]="participant.event_participant_id">
               {{ participant.participant_nm }} 
               <span *ngIf="participant.country" >({{ participant.country }}) </span>
-              <span class="olympic-red">{{ participant.points }} point<span *ngIf="participant.points > 1">s</span></span> 
+              <span >{{ participant.points }} point<span *ngIf="participant.points > 1">s</span></span> 
               <div [ngClass]="getMedal(participant.finish)"></div>
               <span *ngIf="event_information[i].user_selection === participant.event_participant_id" class="green">{{ getPoints(participant.finish, participant.points) }}</span>
+              <img [src]="event_information"
           </mat-radio-button>
         </mat-radio-group>
       </mat-card-content>
