@@ -91,7 +91,7 @@ export class EventsComponent implements OnInit {
     else if (finish === 2)
       return "circle silver";
     else if (finish === 3)
-      return "cirlce bronze";
+      return "circle bronze";
     else return "";
   }
 
